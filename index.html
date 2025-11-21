@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Playlist Terminal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0e27;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 255, 150, 0.03) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(0, 255, 150, 0.03) 3px
+                );
+            pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(13, 17, 35, 0.95);
+            border-radius: 8px;
+            box-shadow: 
+                0 0 60px rgba(0, 255, 150, 0.3),
+                inset 0 0 60px rgba(0, 255, 150, 0.05);
+            padding: 40px;
+            border: 2px solid rgba(0, 255, 150, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 255, 150, 0.3);
+        }
+        
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+            margin-right: 15px;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff5f56;
+        }
+        
+        .terminal-button:nth-child(2) {
+            background: #ffbd2e;
+        }
+        
+        .terminal-button:nth-child(3) {
+            background: #27c93f;
+        }
+        
+        h1 {
+            color: #00ff96;
+            font-size: 1.8em;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 255, 150, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        h1::before {
+            content: '> ';
+            color: #00ff96;
+        }
+        
+        .status-bar {
+            color: #00ff96;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .status-bar span {
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.3; }
+        }
+        
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 4px;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 150, 0.4),
+                inset 0 0 20px rgba(0, 255, 150, 0.1);
+            border: 1px solid rgba(0, 255, 150, 0.5);
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .link-container {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .command-prompt {
+            color: #00ff96;
+            font-size: 1.1em;
+        }
+        
+        .playlist-link {
+            display: inline-block;
+            padding: 12px 25px;
+            background: rgba(0, 255, 150, 0.1);
+            color: #00ff96;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid #00ff96;
+            box-shadow: 0 0 15px rgba(0, 255, 150, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .playlist-link:hover {
+            background: rgba(0, 255, 150, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 255, 150, 0.6);
+        }
+        
+        .tech-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 255, 150, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 150, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+        
+        .binary-code {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            color: rgba(0, 255, 150, 0.2);
+            font-size: 0.7em;
+            line-height: 1.2;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="tech-grid"></div>
+    <div class="binary-code">
+        01001101 01010101 01010011 01001001 01000011<br>
+        01010000 01001100 01000001 01011001 01001100<br>
+        01001001 01010011 01010100 00100000 01010011<br>
+        01011001 01010011 01010100 01000101 01001101
+    </div>
+    
+    <div class="container">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <div class="terminal-button"></div>
+                <div class="terminal-button"></div>
+                <div class="terminal-button"></div>
+            </div>
+            <h1>MEDIA TERMINAL v3.2.1</h1>
+        </div>
+        
+        <div class="status-bar">
+            <span>&gt;</span> System Status: STREAMING | Auto-play: ENABLED | Audio: MUTED
+        </div>
+        
+        <div class="video-wrapper">
+    <iframe 
+        src="https://www.youtube.com/embed/videoseries?list=PLafv6xFGRqZYWiDXw5vhC1gAWDwkZZnYJ&autoplay=1&mute=1" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+    </iframe>
+</div>
+
+<div class="link-container">
+    <span class="command-prompt">$</span>
+    <a href="https://www.youtube.com/playlist?list=PLafv6xFGRqZY9saDE08QrhMVbJnl3be9M" 
+       target="_blank" 
+       class="playlist-link">
+       Execute: Open Full Playlist
+    </a>
+</div>
+</div>
+</body>
+</html>
